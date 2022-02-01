@@ -4,6 +4,7 @@ import android.app.Application
 import com.ssong_develop.coinpaprika.di.dataSourceModule
 import com.ssong_develop.coinpaprika.di.repositoryModule
 import com.ssong_develop.coinpaprika.di.retrofitModule
+import com.ssong_develop.coinpaprika.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -13,7 +14,7 @@ class CoinApplication : Application() {
 
         startKoin {
             androidContext(this@CoinApplication)
-            modules(listOf(retrofitModule, dataSourceModule, repositoryModule))
+            modules(listOf(retrofitModule, dataSourceModule, repositoryModule, viewModelModule))
         }
     }
 }

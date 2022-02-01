@@ -1,13 +1,12 @@
 package com.ssong_develop.coinpaprika.presentation.ui.main
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.ssong_develop.coinpaprika.R
 import com.ssong_develop.coinpaprika.databinding.ActivityMainBinding
-import com.ssong_develop.coinpaprika.domain.repository.Repository
-import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,18 +14,21 @@ class MainActivity : AppCompatActivity() {
         DataBindingUtil.setContentView(this,R.layout.activity_main)
     }
 
-    private val compositeDisposable = CompositeDisposable()
-
-    private val repository: Repository by inject()
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        with(binding){
+            lifecycleOwner = this@MainActivity
+            vm = viewModel
+        }
 
-        compositeDisposable.add(repository.load())
-    }
+        viewModel.coinsLiveData.observe(this){
+            binding.test.text = it.toString()
+        }
 
-    override fun onDestroy() {
-        compositeDisposable.clear()
-        super.onDestroy()
+        viewModel.errorToastLiveData.observe(this){
+            Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
+        }
     }
 }
